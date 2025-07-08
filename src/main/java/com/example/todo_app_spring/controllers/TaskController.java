@@ -30,13 +30,17 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public void updateTask(@PathVariable int id, @RequestBody TaskModel entity) {
+    public ResponseEntity<TaskModel> updateTask(@PathVariable int id, @RequestBody TaskModel entity) {
         TaskModel selectedTask = getTaskById(id);
         if (selectedTask != null) {
             selectedTask.setTitle(entity.getTitle());
             selectedTask.setDescription(entity.getDescription());
             selectedTask.setId(entity.getId());
+            return ResponseEntity.ok().body(selectedTask);
+        } else {
+            return ResponseEntity.notFound().build();
         }
+
     }
 
     @DeleteMapping("/{id}")
