@@ -5,6 +5,7 @@ import com.example.todo_app_spring.models.TaskModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +24,9 @@ public class TaskController {
     }
 
     @PostMapping("/new-task")
-    public void createTask(@RequestBody TaskModel entity) {
+    public ResponseEntity<TaskModel> createTask(@RequestBody TaskModel entity) {
         taskList.add(entity);
+        return ResponseEntity.created(null).body(entity);
     }
 
     @PutMapping("/{id}")
