@@ -31,21 +31,29 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public void updateTask(@PathVariable int id, @RequestBody TaskModel entity) {
-        for (TaskModel task : taskList) {
-            if (task.getId() == id) {
-                task.setTitle(entity.getTitle());
-                task.setDescription(entity.getDescription());
-                task.setId(entity.getId());
-            }
+        TaskModel selectedTask = getTaskById(id);
+        if (selectedTask != null) {
+            selectedTask.setTitle(entity.getTitle());
+            selectedTask.setDescription(entity.getDescription());
+            selectedTask.setId(entity.getId());
         }
     }
 
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable int id) {
+        TaskModel selectedTask = getTaskById(id);
+        if (selectedTask != null) {
+            taskList.remove(selectedTask);
+        }
+    }
+
+    private TaskModel getTaskById(int id) {
+        TaskModel selectedTask = null;
         for (TaskModel taskModel : taskList) {
             if (taskModel.getId() == id) {
-                taskList.remove(taskModel);
+                selectedTask = taskModel;
             }
         }
+        return selectedTask;
     }
 }
