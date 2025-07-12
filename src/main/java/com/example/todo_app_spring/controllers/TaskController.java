@@ -35,7 +35,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskModel> updateTask(@PathVariable int id, @RequestBody TaskModel entity) {
+    public ResponseEntity<TaskModel> updateTask(@PathVariable String id, @RequestBody TaskModel entity) {
         TaskModel updatedTask = service.updateTaskById(id, entity);
         if (updatedTask != null) {
             return ResponseEntity.ok().body(updatedTask);
@@ -45,8 +45,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<TaskModel> deleteTask(@PathVariable int id) {
-        // TaskModel selectedTask = service.getTaskById(id);
+    public ResponseEntity<TaskModel> deleteTask(@PathVariable String id) {
         TaskModel removedTask = service.removeTaskFromListById(id);
         if (removedTask != null) {
             return ResponseEntity.ok().body(removedTask);

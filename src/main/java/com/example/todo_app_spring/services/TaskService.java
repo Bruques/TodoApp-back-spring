@@ -6,16 +6,21 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.todo_app_spring.models.TaskModel;
+import com.example.todo_app_spring.repositories.TaskRepository;
 
 @Service
 public class TaskService {
-    private List<TaskModel> taskList = new ArrayList<>();
+    public TaskRepository repository;
+
+    public TaskService(TaskRepository repository) {
+        this.repository = repository;
+    }
 
     //MARK: - get task by id
-    public TaskModel getTaskById(int id) {
+    public TaskModel getTaskById(String id) {
         TaskModel selectedTask = null;
-        for (TaskModel taskModel : taskList) {
-            if (taskModel.getId() == id) {
+        for (TaskModel taskModel : repository.findAll()) {
+            if (taskModel.getId().equals(id)) {
                 selectedTask = taskModel;
             }
         }
@@ -23,26 +28,28 @@ public class TaskService {
     }
 
     public List<TaskModel> getTaskList() {
-        return taskList;
+        return repository.findAll();
     }
 
     public TaskModel addNewTaskOnList(TaskModel task) {
-        taskList.add(task);
+        // taskList.add(task);
+        repository.insert(task);
         return task;
     }
 
-    public TaskModel removeTaskFromListById(int id) {
+    public TaskModel removeTaskFromListById(String id) {
         TaskModel task = getTaskById(id);
-        taskList.remove(task);
+        // taskList.remove(task);
+        repository.delete(task);
         return task;
     }
 
-    public TaskModel updateTaskById(int id, TaskModel entity) {
+    public TaskModel updateTaskById(String id, TaskModel entity) {
         TaskModel task = getTaskById(id);
         if (task != null) {
             task.setTitle(entity.getTitle());
             task.setDescription(entity.getDescription());
-            task.setId(entity.getId());
+            repository.save(task);
             return task;
         } else {
             return null;
